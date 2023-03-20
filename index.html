@@ -36,7 +36,7 @@
   <nav class="navbar bg-body-tertiary fixed-top">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">
-        <img src="logo.png" alt="Logo" width="90" height="45" class="d-inline-block align-text-top">
+        Assistente Virtual - SESI
       </a>
       <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
         aria-controls="offcanvasNavbar">
@@ -59,7 +59,7 @@
               <a class="nav-link" href="#">Nosso Objetivo</a>
             </li>
             <li class="nav-item">
-              <button class="btn btn-primary" onclick="alterColor()">Alterar Tema</button>
+              <button class="btn btn-outline-primary" onclick="alterColor()">Alterar Tema</button>
             </li>
           </ul>
         </div>
@@ -70,10 +70,14 @@
   <div style="display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;">
-    <form class="d-flex" role="search">
-      <input class="form-control me-2" type="search" placeholder="O que você procura?" aria-label="Search">
-      <button class="btn btn-outline-success" type="submit"><img src="microphone.png" width="32" height="32" /></button>
+  height: 100vh;
+  flex-direction: column;">
+    <h3>O que você procura?</h3>
+    <form class="d-flex" role="search" action="https://bryzzen-kibador.github.io/Assistente-Virtual-SESI/busca">
+      <input class="form-control me-2" name="search" type="search" placeholder="Digite algo..." aria-label="Search">
+      <button class="btn btn-outline-primary me-2" type="button"><img src="microphone.png" width="32" height="32" /></button>
+      <button class="btn btn-outline-primary" type="submit">Buscar</button>
+
     </form>
   </div>
 
