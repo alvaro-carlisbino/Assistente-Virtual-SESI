@@ -22,13 +22,6 @@
     }
   </script>
 
-  <style>
-    .tudo {
-      margin-top: 80px;
-      /* ajuste o valor de acordo com a altura da sua navbar */
-    }
-  </style>
-
 </head>
 
 <body>
@@ -50,7 +43,7 @@
         <div class="offcanvas-body">
           <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Início</a>
+              <a class="nav-link active" aria-current="page" href="/">Início</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">Quem Somos</a>
@@ -73,13 +66,43 @@
   height: 100vh;
   flex-direction: column;">
     <h3>O que você procura?</h3>
-    <form class="d-flex" role="search" action="https://bryzzen-kibador.github.io/Assistente-Virtual-SESI/busca">
-      <input class="form-control me-2" name="search" type="search" placeholder="Digite algo..." aria-label="Search">
-      <button class="btn btn-outline-primary me-2" type="button"><img src="microphone.png" width="32" height="32" /></button>
+    <form class="d-flex" role="search" action="https://bryzzen-kibador.github.io/Assistente-Virtual-SESI/busca.html">
+
+      <input class="form-control me-2" name="search" id="search-input" type="search" placeholder="Digite algo..."
+        aria-label="Search">
+
+      <button class="btn btn-outline-primary me-2" type="button" onclick="startListening()"><img src="microphone.png"
+          width="32" height="32" /></button>
+
+
       <button class="btn btn-outline-primary" type="submit">Buscar</button>
 
     </form>
   </div>
+  <script>
+    var recognition = new webkitSpeechRecognition();
+
+    recognition.lang = "pt-BR";
+
+    recognition.continuous = false;
+
+    function startListening() {
+      console.log("Iniciando reconhecimento de voz...");
+
+      recognition.start();
+
+      recognition.onresult = function (event) {
+        var text = event.results[0][0].transcript;
+
+        document.getElementById("search-input").value = text;
+
+        document.forms["search-form"].submit();
+
+        console.log("Reconhecimento de voz finalizado.");
+      }
+    }
+  </script>
+
 
 </body>
 
