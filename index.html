@@ -1,109 +1,48 @@
 <!DOCTYPE html>
-<html lang="pt_BR" data-bs-theme="light">
+<html>
+  <head>
+    <title>Assistente Virtual - SESI</title>
+    <style>
+      body { margin: 0; padding-bottom: 3rem; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
 
-<head>
-  <meta charset="UTF-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Assistente Virtual - SISTEMA FIEP</title>
-  <link rel="icon" href="logo.png">
+      #form { background: rgba(0, 0, 0, 0.15); padding: 0.25rem; position: fixed; bottom: 0; left: 0; right: 0; display: flex; height: 3rem; box-sizing: border-box; backdrop-filter: blur(10px); }
+      #input { border: none; padding: 0 1rem; flex-grow: 1; border-radius: 2rem; margin: 0.25rem; }
+      #input:focus { outline: none; }
+      #form > button { background: #333; border: none; padding: 0 1rem; margin: 0.25rem; border-radius: 3px; outline: none; color: #fff; }
 
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-  <link href="https://getbootstrap.com/docs/5.3/assets/css/docs.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-
-  <script>
-    function alterColor() {
-      var element = document.getElementsByTagName("html")[0]
-      if (element.getAttribute("data-bs-theme") == "light")
-        element.setAttribute("data-bs-theme", "dark")
-      else
-        element.setAttribute("data-bs-theme", "light")
-    }
-  </script>
-
-</head>
-
-<body>
-
-  <nav class="navbar bg-body-tertiary fixed-top">
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">
-        Assistente Virtual - SESI
-      </a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
-        aria-controls="offcanvasNavbar">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
-        <div class="offcanvas-header">
-          <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Menu</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-        </div>
-        <div class="offcanvas-body">
-          <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/">Início</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Quem Somos</a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="#">Nosso Objetivo</a>
-            </li>
-            <li class="nav-item">
-              <button class="btn btn-outline-primary" onclick="alterColor()">Alterar Tema</button>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </nav>
-
-  <div style="display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-  flex-direction: column;">
-    <h3>O que você procura?</h3>
-    <form class="d-flex" role="search" action="https://bryzzen-kibador.github.io/Assistente-Virtual-SESI/busca.html">
-
-      <input class="form-control me-2" name="search" id="search-input" type="search" placeholder="Digite algo..."
-        aria-label="Search">
-
-      <button class="btn btn-outline-primary me-2" type="button" onclick="startListening()"><img src="microphone.png"
-          width="32" height="32" /></button>
-
-
-      <button class="btn btn-outline-primary" type="submit">Buscar</button>
-
+      #messages { list-style-type: none; margin: 0; padding: 0; }
+      #messages > li { padding: 0.5rem 1rem; }
+      #messages > li:nth-child(odd) { background: #efefef; }
+    </style>
+  </head>
+  <body>
+    <ul id="messages"></ul>
+    <form id="form" action="">
+      <input id="input" autocomplete="off" /><button>Enviar Mensagem</button>
     </form>
-  </div>
-  <script>
-    var recognition = new webkitSpeechRecognition();
+    <script src="/socket.io/socket.io.js"></script>
 
-    recognition.lang = "pt-BR";
+    <script>
+      var socket = io();
 
-    recognition.continuous = false;
+      var messages = document.getElementById('messages');
+      var form = document.getElementById('form');
+      var input = document.getElementById('input');
 
-    function startListening() {
-      console.log("Iniciando reconhecimento de voz...");
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        if (input.value) {
+          socket.emit('chat message', input.value);
+          input.value = '';
+        }
+      });
 
-      recognition.start();
-
-      recognition.onresult = function (event) {
-        var text = event.results[0][0].transcript;
-
-        document.getElementById("search-input").value = text;
-
-        document.forms["search-form"].submit();
-
-        console.log("Reconhecimento de voz finalizado.");
-      }
-    }
-  </script>
-
-
-</body>
-
+      socket.on('chat message', function(msg) {
+        var item = document.createElement('li');
+        item.textContent = msg;
+        messages.appendChild(item);
+        window.scrollTo(0, document.body.scrollHeight);
+      });
+    </script>
+  </body>
 </html>
