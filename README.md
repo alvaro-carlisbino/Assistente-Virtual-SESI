@@ -11,7 +11,7 @@
     <li>Suporte técnico: ajuda com problemas técnicos relacionados a equipamentos e sistemas utilizados no colégio.</li>
   </ul>
   <h2>Uso</h2>
-  <p>Entre em nosso [site](https://assistente-sesi.glitch.me) para usar nossa assistente virtual!</p>
+  <p>Entre em nosso <a href="https://assistente-sesi.glitch.me">site</a> para usar nossa assistente virtual!</p>
   <h2>Contribuição</h2>
   <p>Se você deseja contribuir para este projeto, sinta-se à vontade para fazer um fork deste repositório e enviar pull requests com suas melhorias.</p>
   <h2>Licença</h2>
