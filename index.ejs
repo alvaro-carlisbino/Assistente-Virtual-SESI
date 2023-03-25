@@ -119,7 +119,12 @@
 
     socket.on("chat message", function (msg) {
       var item = document.createElement("li");
-      item.textContent = msg;
+      var linkRegex = /(https?:\/\/[^\s]+)/g;
+      msg = msg.replace(linkRegex, function (url) {
+        return '<a href="' + url + '">' + url + '</a>';
+      });
+      msg = msg.replace(/(?:\r\n|\r|\n)/g, "<br>");
+      item.innerHTML = msg;
       messages.appendChild(item);
       window.scrollTo(0, document.body.scrollHeight);
     });
