@@ -1,13 +1,17 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt-BR">
 
 <head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
   <title>Assistente Virtual - SESI</title>
+
   <style>
     body {
       margin: 0;
       padding-bottom: 3rem;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+        Helvetica, Arial, sans-serif;
     }
 
     #form {
@@ -60,18 +64,22 @@
     }
 
     @media screen and (max-width: 767px) {
+      #form {
+        height: 5rem;
+      }
+
       #input {
-        font-size: 1.2rem;
+        font-size: 1.5rem;
         width: 80%;
-        height: 2.5rem;
+        height: 3rem;
         margin: 0.5rem 0;
       }
 
       #form>button {
-        font-size: 1.2rem;
-        padding: 0.5rem 1rem;
+        font-size: 1.5rem;
+        padding: 0.75rem 1rem;
         margin: 0.25rem;
-        height: 2.5rem;
+        height: 3rem;
         width: 80%;
       }
     }
@@ -82,30 +90,52 @@
   <ul id="messages"></ul>
   <form id="form" action="">
     <input id="input" autocomplete="off" /><button>Enviar</button>
+    <button id="voice-input">
+      <img src="https://cdn.glitch.global/286587fb-ee60-47f6-95fe-4b8fab434e94/microphone%20(3).png?v=1679605492323"
+        width="32" height="32" />
+    </button>
   </form>
   <script src="/socket.io/socket.io.js"></script>
 
   <script>
     var socket = io();
 
-    var messages = document.getElementById('messages');
-    var form = document.getElementById('form');
-    var input = document.getElementById('input');
+    var messages = document.getElementById("messages");
+    var form = document.getElementById("form");
+    var input = document.getElementById("input");
+    var voiceInput = document.getElementById("voice-input");
 
-    form.addEventListener('submit', function (e) {
+    var room = <%= room %>
+
+      socket.emit("join", room);
+
+    form.addEventListener("submit", function (e) {
       e.preventDefault();
       if (input.value) {
-        socket.emit('chat message', input.value);
-        input.value = '';
+        socket.emit("chat message", { room: room, message: input.value });
+        input.value = "";
       }
     });
 
-    socket.on('chat message', function (msg) {
-      var item = document.createElement('li');
+    socket.on("chat message", function (msg) {
+      var item = document.createElement("li");
       item.textContent = msg;
       messages.appendChild(item);
       window.scrollTo(0, document.body.scrollHeight);
     });
+
+    voiceInput.addEventListener("click", function (event) {
+      event.stopPropagation();
+      var recognition = new webkitSpeechRecognition();
+      recognition.onresult = function (event) {
+        if (event.results.length > 0) {
+          var voiceMessage = event.results[0][0].transcript;
+          input.value = voiceMessage;
+        }
+      };
+      recognition.start();
+    });
+
   </script>
 </body>
 
