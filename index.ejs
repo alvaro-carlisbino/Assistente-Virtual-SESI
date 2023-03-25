@@ -83,6 +83,31 @@
         width: 80%;
       }
     }
+
+    .user {
+  background-color: #efefef;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 10px 0;
+  max-width: 70%;
+  align-self: flex-start;
+  float: right;
+  clear: both;
+}
+
+.robot {
+  background-color: #333;
+  color: #fff;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 10px 0;
+  max-width: 70%;
+  align-self: flex-end;
+  float: left;
+  clear: both;
+}
+
+    
   </style>
 </head>
 
@@ -95,6 +120,7 @@
         width="32" height="32" />
     </button>
   </form>
+
   <script src="/socket.io/socket.io.js"></script>
 
   <script>
@@ -112,19 +138,20 @@
     form.addEventListener("submit", function (e) {
       e.preventDefault();
       if (input.value) {
-        socket.emit("chat message", { room: room, message: input.value });
+        socket.emit("chat message", { room: room, message: input.value, sender: "user" });
         input.value = "";
       }
     });
 
-    socket.on("chat message", function (msg) {
+    socket.on("chat message", function (data) {
       var item = document.createElement("li");
       var linkRegex = /(https?:\/\/[^\s]+)/g;
-      msg = msg.replace(linkRegex, function (url) {
+      data.message = data.message.replace(linkRegex, function (url) {
         return '<a href="' + url + '">' + url + '</a>';
       });
-      msg = msg.replace(/(?:\r\n|\r|\n)/g, "<br>");
-      item.innerHTML = msg;
+      data.message = data.message.replace(/(?:\r\n|\r|\n)/g, "<br>");
+      item.classList.add(data.sender);
+      item.innerHTML = data.message;
       messages.appendChild(item);
       window.scrollTo(0, document.body.scrollHeight);
     });

@@ -245,9 +245,11 @@ io.on("connection", (socket) => {
             if (response.answer == undefined) {
                 response.answer = "Desculpe, não entendi sua pergunta."
             }
-            io.to(data.room).emit("chat message", response.answer);
+            io.to(data.room).emit("chat message", {
+                message: response.answer, sender: "robot"
+            });
         })
-        io.to(data.room).emit("chat message", data.message);
+        io.to(data.room).emit("chat message", { message: data.message, sender: "user" });
     });
 
     socket.on("leave", (room) => {
