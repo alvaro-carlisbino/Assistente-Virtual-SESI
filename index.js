@@ -41,7 +41,7 @@ manager.addAnswer("pt", "cumprimento", "Olá, em que posso ajudar?");
 manager.addAnswer(
     "pt",
     "nome",
-    "Meu nome é Chatbot, sou um assistente virtual."
+    "Sou a Blue, uma assistente virtual."
 );
 manager.addAnswer(
     "pt",
@@ -79,6 +79,20 @@ Essas são as etapas básicas  para ser usado, á medida que você se torna mais
 
 manager.addDocument("pt", "powerpoint", "powerpoint");
 manager.addDocument("pt", "power point", "powerpoint");
+
+manager.addDocument("pt", "Quais sites podem ser utilizados para fazer slides", "slides")
+
+manager.addAnswer("pt", 'slides', `•Microsoft Sway 
+•Canva 
+•Power point 
+•Prezi 
+•Swipe 
+•Deckset
+•Photoshop
+•Adobe Creative Cloud 
+
+Esses são os principais e mais utilizados  pelas pessoas.
+`)
 
 manager.addAnswer(
     "pt",
