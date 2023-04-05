@@ -254,7 +254,7 @@ io.on("connection", (socket) => {
     socket.on("join", (room) => {
         console.log(`Usuário ${socket.id} entrou na sala ${room}`);
         socket.join(room);
-        rooms.push(room);
+        rooms.push({ userId: socket.id, roomId: room });
     });
 
     socket.on("chat message", (data) => {
@@ -273,10 +273,9 @@ io.on("connection", (socket) => {
         });
     });
 
-    socket.on("leave", (room) => {
-        console.log(`Usuário ${socket.id} saiu da sala ${room}`);
-        socket.leave(room);
-        rooms.splice(rooms.indexOf(room), 1);
+    socket.on("disconnect", () => {
+        console.log(`Usuário ${socket.id} desconectou da sala ${rooms.find((f) => f.userId == socket.id).roomId}.`);
+        rooms = rooms.filter((r) => r.userId !== socket.id);
     });
 });
 
