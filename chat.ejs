@@ -18,8 +18,8 @@
     body {
       margin: 0;
       padding-bottom: 3rem;
-      font-family: Poppins, BlinkMacSystemFont, "Segoe UI", Roboto,
-        Helvetica, Arial, sans-serif;
+      background-color: #f5f5f5;
+      font-family: Poppins, sans-serif;
     }
 
     #form {
@@ -165,7 +165,7 @@
     function scrollToBottom() {
       var messages = document.getElementById("messages");
       messages.scrollTop = messages.scrollHeight;
-      window.scrollTo(0, document.body.scrollHeight);      
+      window.scrollTo(0, document.body.scrollHeight);
     }
 
     socket.on("chat message", function (data) {
@@ -188,13 +188,23 @@
     voiceInput.addEventListener("click", function (event) {
       event.stopPropagation();
       var recognition = new webkitSpeechRecognition();
+
+      recognition.onstart = function () {
+        voiceInput.style.outline = "2px solid #0d6efd";
+      };
+
       recognition.onresult = function (event) {
         if (event.results.length > 0) {
           var voiceMessage = event.results[0][0].transcript;
           input.value = voiceMessage;
         }
       };
+
+      recognition.onend = function () {
+        voiceInput.style.outline = "none"; 
+      };
       recognition.start();
+
     });
 
   </script>
