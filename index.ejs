@@ -26,7 +26,7 @@
         body {
             margin: 0;
             padding-bottom: 3rem;
-            background-color: #f5f5f5;
+            background-color: #F5F5F5;
             font-family: Poppins, sans-serif;
         }
 
@@ -41,7 +41,7 @@
             height: 3rem;
             box-sizing: border-box;
             backdrop-filter: blur(10px);
-            margin-top: 75vh;
+            margin-top: 1rem;
         }
 
         #input {
@@ -57,7 +57,6 @@
         }
 
         #form>button {
-            background: #333;
             border: none;
             padding: 0 1rem;
             margin: 0.25rem;
@@ -75,6 +74,7 @@
             overflow-y: scroll;
             padding-bottom: 50px;
             margin-bottom: 3rem;
+            margin-top: 20px;
         }
 
         .modal-backdrop {
@@ -121,7 +121,7 @@
         }
 
         .user {
-            background-color: #efefef;
+            background-color: #D3AEF0;
             border-radius: 10px;
             padding: 10px;
             margin: 10px 0;
@@ -129,10 +129,16 @@
             align-self: flex-start;
             float: right;
             clear: both;
+            color: "#FFF"
+        }
+
+        #voice-input {
+            width: auto;
+            height: auto;
         }
 
         .robot {
-            background-color: #333;
+            background-color: #0229B06B;
             color: #fff;
             border-radius: 10px;
             padding: 10px;
@@ -163,7 +169,7 @@
                 background-color: #007bff;
                 color: #fff;
                 border: none;
-                width: 75%;
+                width: auto;
                 max-width: 100px;
             }
 
@@ -172,6 +178,13 @@
                     display: none;
                 }
             }
+        }
+
+
+
+        button {
+            width: auto;
+            height: auto;
         }
 
         .navbar {
@@ -183,6 +196,8 @@
             background-color: #fff;
             z-index: 999;
         }
+
+
     </style>
 
 </head>
@@ -191,7 +206,7 @@
 
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
-            <a class="navbar-brand" href="/"><b>Blue - Assistente Virtual</b></a>
+            <a class="navbar-brand" href="/">Blue - Assistente Virtual</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarScroll"
                 aria-controls="navbarScroll" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -284,8 +299,8 @@
     </div>
 
     <form id="form" action="">
-        <input id="input" autocomplete="off" /><button>Enviar</button>
-        <button id="voice-input">
+        <input id="input" autocomplete="off" /><button class="btn btn-secondary">Enviar</button>
+        <button id="voice-input" type="button" class="btn btn-secondary">
             <img src="https://cdn.glitch.global/286587fb-ee60-47f6-95fe-4b8fab434e94/microphone%20(3).png?v=1679605492323"
                 width="32" height="32" />
         </button>
@@ -309,8 +324,8 @@
             if (input.value && input.value.trim() !== "") {
                 socket.emit("chat message", { room: <%= room %>, message: input.value, sender: "user" });
         input.value = "";
-      }
-    });
+        }
+        });
 
         function scrollToBottom() {
             var messages = document.getElementById("messages");
@@ -326,6 +341,9 @@
             });
             data.message = data.message.replace(/(?:\r\n|\r|\n)/g, "<br>");
             item.classList.add(data.sender);
+            item.style.backgroundColor = data.sender == "user" ? "rgba(211, 174, 240, 1)" : "rgba(2, 41, 176, 0.42)";
+            item.style.color = "#FFF"
+            item.style.boxShadow = "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px"
             item.innerHTML = data.message;
             messages.appendChild(item);
             scrollToBottom();

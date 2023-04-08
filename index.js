@@ -283,7 +283,7 @@ io.on("connection", (socket) => {
     });
 
     socket.on("disconnect", () => {
-        console.log(`Usuário ${socket.id} desconectou da sala ${rooms.find((f) => f.userId == socket.id).roomId}.`);
+        console.log(`Usuário ${socket.id} desconectou da sala ${rooms.find((f) => f.userId == socket.id) ? rooms.find((f) => f.userId == socket.id).roomId : "não encontrada"}.`);
         rooms = rooms.filter((r) => r.userId !== socket.id);
     });
 });
