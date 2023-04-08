@@ -8,6 +8,10 @@
 
     <title>BLUE - SESI</title>
 
+    <meta name="description" content="Uma I.A para os alunos do Colégio SESI">
+    <meta name="author" content="Alvaro Matheus Madureira Carlisbino">
+    <meta name="keywords" content="Inteligencia Artificial, SESI, Colégio SESI">
+
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
         rel="stylesheet">
 
@@ -20,8 +24,164 @@
 
     <style>
         body {
+            margin: 0;
+            padding-bottom: 3rem;
             background-color: #f5f5f5;
             font-family: Poppins, sans-serif;
+        }
+
+        #form {
+            background: rgba(0, 0, 0, 0.15);
+            padding: 0.25rem;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            height: 3rem;
+            box-sizing: border-box;
+            backdrop-filter: blur(10px);
+            margin-top: 75vh;
+        }
+
+        #input {
+            border: none;
+            padding: 0 1rem;
+            flex-grow: 1;
+            border-radius: 2rem;
+            margin: 0.25rem;
+        }
+
+        #input:focus {
+            outline: none;
+        }
+
+        #form>button {
+            background: #333;
+            border: none;
+            padding: 0 1rem;
+            margin: 0.25rem;
+            border-radius: 3px;
+            outline: none;
+            color: #fff;
+        }
+
+        #chat-container {
+            position: fixed;
+            bottom: 3rem;
+            left: 0;
+            right: 0;
+            top: 0;
+            overflow-y: scroll;
+            padding-bottom: 50px;
+            margin-bottom: 3rem;
+        }
+
+        .modal-backdrop {
+            opacity: 0.5 !important;
+            display: none;
+        }
+
+        #messages {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            padding-top: 50px;
+            padding-bottom: 100px;
+        }
+
+        #messages>li {
+            padding: 0.5rem 1rem;
+            margin: 15px;
+        }
+
+        #messages>li:nth-child(odd) {
+            background: #efefef;
+        }
+
+        @media screen and (max-width: 767px) {
+            #form {
+                height: 5rem;
+            }
+
+            #input {
+                font-size: 1.5rem;
+                width: 80%;
+                height: 3rem;
+                margin: 0.5rem 0;
+            }
+
+            #form>button {
+                font-size: 1.5rem;
+                padding: 0.75rem 1rem;
+                margin: 0.25rem;
+                height: 3rem;
+                width: 80%;
+            }
+        }
+
+        .user {
+            background-color: #efefef;
+            border-radius: 10px;
+            padding: 10px;
+            margin: 10px 0;
+            max-width: 70%;
+            align-self: flex-start;
+            float: right;
+            clear: both;
+        }
+
+        .robot {
+            background-color: #333;
+            color: #fff;
+            border-radius: 10px;
+            padding: 10px;
+            margin: 10px 0;
+            max-width: 70%;
+            align-self: flex-end;
+            float: left;
+            clear: both;
+        }
+
+        button {
+            font-size: 1rem;
+            padding: 8px 12px;
+            border-radius: 4px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            width: 75%;
+            max-width: 300px;
+        }
+
+        @media screen and (max-width: 480px) {
+
+            button {
+                font-size: auto;
+                padding: 8px 12px;
+                border-radius: 4px;
+                background-color: #007bff;
+                color: #fff;
+                border: none;
+                width: 75%;
+                max-width: 100px;
+            }
+
+            @media only screen and (max-width: 480px) {
+                #voice-input {
+                    display: none;
+                }
+            }
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background-color: #fff;
+            z-index: 999;
         }
     </style>
 
@@ -119,14 +279,85 @@
         </div>
     </nav>
 
-    <div style="display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 80vh;">
-        <h4 style="margin-bottom: 20px;">Acessar a Blue:</h4>
-        <a class="btn btn-outline-primary" href="/chat">Clique Aqui</a>
+    <div id="chat-container">
+        <ul id="messages"></ul>
     </div>
+
+    <form id="form" action="">
+        <input id="input" autocomplete="off" /><button>Enviar</button>
+        <button id="voice-input">
+            <img src="https://cdn.glitch.global/286587fb-ee60-47f6-95fe-4b8fab434e94/microphone%20(3).png?v=1679605492323"
+                width="32" height="32" />
+        </button>
+    </form>
+
+    <script src="/socket.io/socket.io.js"></script>
+
+    <script>
+
+        var socket = io();
+
+        var messages = document.getElementById("messages");
+        var form = document.getElementById("form");
+        var input = document.getElementById("input");
+        var voiceInput = document.getElementById("voice-input");
+
+        socket.emit("join", <%= room %>);
+
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            if (input.value && input.value.trim() !== "") {
+                socket.emit("chat message", { room: <%= room %>, message: input.value, sender: "user" });
+        input.value = "";
+      }
+    });
+
+        function scrollToBottom() {
+            var messages = document.getElementById("messages");
+            messages.scrollTop = messages.scrollHeight;
+            window.scrollTo(0, document.body.scrollHeight);
+        }
+
+        socket.on("chat message", function (data) {
+            var item = document.createElement("li");
+            var linkRegex = /(https?:\/\/[^\s]+)/g;
+            data.message = data.message.replace(linkRegex, function (url) {
+                return '<a href="' + url + '">' + url + '</a>';
+            });
+            data.message = data.message.replace(/(?:\r\n|\r|\n)/g, "<br>");
+            item.classList.add(data.sender);
+            item.innerHTML = data.message;
+            messages.appendChild(item);
+            scrollToBottom();
+        });
+
+        window.onload = function () {
+            scrollToBottom();
+        };
+
+        voiceInput.addEventListener("click", function (event) {
+            event.stopPropagation();
+            var recognition = new webkitSpeechRecognition();
+
+            recognition.onstart = function () {
+                voiceInput.style.outline = "2px solid #0d6efd";
+            };
+
+            recognition.onresult = function (event) {
+                if (event.results.length > 0) {
+                    var voiceMessage = event.results[0][0].transcript;
+                    input.value = voiceMessage;
+                }
+            };
+
+            recognition.onend = function () {
+                voiceInput.style.outline = "none";
+            };
+            recognition.start();
+
+        });
+
+    </script>
 
 </body>
 

@@ -254,15 +254,10 @@ manager.addDocument(
 let rooms = [];
 
 app.get("/", async (req, res) => {
-    res.render(__dirname + "/index.ejs");
-})
-
-
-app.get("/chat", (req, res) => {
     let i = 0;
     while (rooms[i] != undefined) i++;
-    res.render(__dirname + "/chat.ejs", { room: i });
-});
+    res.render(__dirname + "/index.ejs", { room: i });
+})
 
 io.on("connection", (socket) => {
     socket.on("join", (room) => {
