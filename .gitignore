@@ -11,3 +11,4 @@ cert.crt
 docker-compose.yml
 Dockerfile
 .env
+docker-compose.yml
