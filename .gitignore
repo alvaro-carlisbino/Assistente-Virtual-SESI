@@ -3,3 +3,11 @@ package-lock.json
 yarn-error.log
 model.nlp
 .gitignore
+privatekey.pem
+publickey.pem
+certificate.pem
+certrequest.csr
+cert.crt
+docker-compose.yml
+Dockerfile
+.env

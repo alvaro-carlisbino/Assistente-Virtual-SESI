@@ -1,12 +1,23 @@
 const app = require("express")();
+
+var fs = require('fs');
+
+var options = {
+    key: fs.readFileSync('client-key.pem'),
+    cert: fs.readFileSync('client-cert.pem')
+};
+
+const https = require("https").createServer(options, app)
 const http = require("http").Server(app);
 const io = require("socket.io")(http);
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 80;
 const { NlpManager } = require("node-nlp");
 const manager = new NlpManager({ languages: ["pt"] });
 require("ejs");
 app.set("view engine", "ejs");
 require("dotenv").config();
+
+
 
 const { Client, GatewayIntentBits } = require("discord.js");
 
@@ -336,7 +347,7 @@ io.on("connection", (socket) => {
             },
             {
               name: "Endereço de IPv4:",
-              value: socket.handshake.headers["x-forwarded-for"].split(",")[0],
+              value: socket.handshake.headers["x-forwarded-for"] ? socket.handshake.headers["x-forwarded-for"].split(",")[0] : "Não encontrado",
             },
             {
               name: "Navegador:",
@@ -421,3 +432,5 @@ http.listen(port, async () => {
   await manager.train();
   console.log(`Servidor rodando em http://localhost:${port}/`);
 });
+
+https.listen(443);
