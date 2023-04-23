@@ -12,3 +12,5 @@ docker-compose.yml
 Dockerfile
 .env
 docker-compose.yml
+amcnetwork.cert
+amcnetwork.key

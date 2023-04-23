@@ -3,21 +3,18 @@ const app = require("express")();
 var fs = require('fs');
 
 var options = {
-    key: fs.readFileSync('client-key.pem'),
-    cert: fs.readFileSync('client-cert.pem')
+    key: fs.readFileSync('amcnetwork.key'),
+    cert: fs.readFileSync('amcnetwork.cert')
 };
-
-const https = require("https").createServer(options, app)
-const http = require("http").Server(app);
+//const http = require("http").Server(app)
+const http = require("https").Server(options, app)
 const io = require("socket.io")(http);
-const port = process.env.PORT || 80;
+const port = process.env.PORT || 3000;
 const { NlpManager } = require("node-nlp");
 const manager = new NlpManager({ languages: ["pt"] });
 require("ejs");
 app.set("view engine", "ejs");
 require("dotenv").config();
-
-
 
 const { Client, GatewayIntentBits } = require("discord.js");
 
@@ -37,6 +34,11 @@ manager.addDocument("pt", "Boa tarde", "cumprimento");
 manager.addDocument("pt", "Boa noite", "cumprimento");
 manager.addDocument("pt", "Qual é o seu nome", "nome");
 manager.addDocument("pt", "Quem é você", "nome");
+manager.addDocument("pt", "Como você está", "bem-estar");
+manager.addDocument("pt", "Como você está?", "bem-estar");
+manager.addDocument("pt", "Como voce esta", "bem-estar");
+manager.addDocument("pt", "Como voce esta?", "bem-estar");
+manager.addAnswer("pt", "bem-estar", "Estou bem e pronta para resolver suas dúvidas!");
 manager.addDocument("pt", "Quero acessar o portal do aluno", "portal");
 manager.addDocument("pt", "Como faço para acessar o portal do aluno", "portal");
 manager.addDocument(
@@ -318,10 +320,14 @@ async function sendDc(pergunta, resposta, id, sala) {
 }
 
 app.get("/", async (req, res) => {
+  res.render(__dirname + "/index.ejs");
+}); 
+
+app.get("/chat", async(req, res) => {
   let i = 0;
   while (rooms[i] != undefined) i++;
-  res.render(__dirname + "/index.ejs", { room: i });
-});
+  res.render(__dirname + "/chat.ejs", { room: i });
+})
 
 io.on("connection", (socket) => {
   //console.log(socket)
@@ -432,5 +438,3 @@ http.listen(port, async () => {
   await manager.train();
   console.log(`Servidor rodando em http://localhost:${port}/`);
 });
-
-https.listen(443);

@@ -178,10 +178,6 @@
                 max-width: 100px;
             }
 
-            .adaptar {
-                margin-right: 0 !important;
-            }
-
             @media only screen and (max-width: 480px) {
                 #voice-input {
                     display: none;
@@ -211,11 +207,11 @@
             color: #fff !important;
         }
 
-        .navbar-brand {
+        .navbar-brand{
             color: #fff !important;
         }
 
-        .nav-item {
+        .nav-item{
             color: #fff !important;
         }
 
@@ -232,33 +228,13 @@
             color: #fff !important;
         }
 
-        .modal-content {
+        .modal-content{
             background-color: #002352 !important;
             color: #fff !important;
         }
 
         .btn-close {
             color: #fff !important;
-        }
-
-        .dropdown-menu {
-            background-color: #002352 !important;
-            color: #fff !important;
-        }
-
-        .dropdown-item {
-            background-color: #002352 !important;
-            color: #fff !important;
-        }
-
-        .dropdown {
-            background: none !important;
-            outline: none !important;
-        }
-
-        .dropdown-toggle {
-            background: none !important;
-            outline: none !important;
         }
     </style>
 
@@ -356,30 +332,75 @@
         </div>
     </nav>
 
-    <div style="display: flex;
-    align-items: center;
-    justify-content: center;
-    padding-top: 15rem;
-    color: #fff">
-        <p style="font-size: 24px;">Seja bem-vindo ao Painel de Assistencia do Colégio SESI</p>
+    <div id="chat-container">
+        <ul id="messages"></ul>
     </div>
 
-    <div style="display: flex;
-    align-items: center;
-    justify-content: center;
-    padding-top: 5rem;">
-        <a class="btn btn-secondary adaptar"
-            href="https://alunos.sesisenaipr.org.br/FrameHTML/Web/App/Edu/PortalEducacional/login/"
-            style="color: #fff; font-size: 24px; margin-right: 200px;">Portal do Aluno</a>
-        <a class="btn btn-secondary" href="https://www.sesieducacao.com.br/publico/"
-            style="color: #fff; font-size: 24px;">Portal SESI
-            Educação</a>
-    </div>
+    <form id="form" action="">
+        <input id="input" autocomplete="off" /><button class="btn btn-secondary">Enviar</button>
+        <button id="voice-input" type="button" class="btn btn-secondary">
+            <img src="https://cdn.glitch.global/286587fb-ee60-47f6-95fe-4b8fab434e94/microphone%20(3).png?v=1679605492323"
+                width="32" height="32" />
+        </button>
+    </form>
 
-    <a href="/chat" class="btn btn-secondary rounded-circle"
-        style="position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; display: flex; justify-content: center; align-items: center; font-size: 3rem;">?</a>
+    <script src="/socket.io/socket.io.js"></script>
 
-
+    <script>
+        var socket = io();
+        var messages = document.getElementById("messages");
+        var form = document.getElementById("form");
+        var input = document.getElementById("input");
+        var voiceInput = document.getElementById("voice-input");
+        socket.emit("join", <%= room %>);
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            if (input.value && input.value.trim() !== "") {
+                socket.emit("chat message", { room: <%= room %>, message: input.value, sender: "user" });
+        input.value = "";
+        }
+        });
+        function scrollToBottom() {
+            var messages = document.getElementById("messages");
+            messages.scrollTop = messages.scrollHeight;
+            window.scrollTo(0, document.body.scrollHeight);
+        }
+        socket.on("chat message", function (data) {
+            var item = document.createElement("li");
+            var linkRegex = /(https?:\/\/[^\s]+)/g;
+            data.message = data.message.replace(linkRegex, function (url) {
+                return '<a href="' + url + '">' + url + '</a>';
+            });
+            data.message = data.message.replace(/(?:\r\n|\r|\n)/g, "<br>");
+            item.classList.add(data.sender);
+            item.style.backgroundColor = data.sender == "user" ? "rgba(211, 174, 240, 1)" : "rgba(2, 41, 176, 0.42)";
+            item.style.color = "#FFF"
+            item.style.boxShadow = "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px"
+            item.innerHTML = data.message;
+            messages.appendChild(item);
+            scrollToBottom();
+        });
+        window.onload = function () {
+            scrollToBottom();
+        };
+        voiceInput.addEventListener("click", function (event) {
+            event.stopPropagation();
+            var recognition = new webkitSpeechRecognition();
+            recognition.onstart = function () {
+                voiceInput.style.outline = "2px solid #0d6efd";
+            };
+            recognition.onresult = function (event) {
+                if (event.results.length > 0) {
+                    var voiceMessage = event.results[0][0].transcript;
+                    input.value = voiceMessage;
+                }
+            };
+            recognition.onend = function () {
+                voiceInput.style.outline = "none";
+            };
+            recognition.start();
+        });
+    </script>
 
 </body>
 
