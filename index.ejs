@@ -26,7 +26,7 @@
         body {
             margin: 0;
             padding-bottom: 3rem;
-            background-color: #9BADED;
+            background-color: #022657;
             font-family: Poppins, sans-serif;
         }
 
@@ -45,7 +45,7 @@
         }
 
         .navbar {
-            background-color: #002352;
+            background-color: #004AAD;
             color: #fff;
         }
 
@@ -202,12 +202,12 @@
             left: 0;
             right: 0;
             height: 60px;
-            background-color: #002352;
+            background-color: #004AAD;
             z-index: 999;
         }
 
         .navbar {
-            background-color: #002352 !important;
+            background-color: #004AAD !important;
             color: #fff !important;
         }
 
@@ -224,16 +224,16 @@
         }
 
         .btn-secondary {
-            background-color: #002352 !important;
+            background-color: #004AAD !important;
         }
 
         .modal-body {
-            background-color: #002352 !important;
+            background-color: #022657 !important;
             color: #fff !important;
         }
 
         .modal-content {
-            background-color: #002352 !important;
+            background-color: #022657 !important;
             color: #fff !important;
         }
 
@@ -242,12 +242,12 @@
         }
 
         .dropdown-menu {
-            background-color: #002352 !important;
+            background-color: #022657 !important;
             color: #fff !important;
         }
 
         .dropdown-item {
-            background-color: #002352 !important;
+            background-color: #022657 !important;
             color: #fff !important;
         }
 
@@ -260,12 +260,22 @@
             background: none !important;
             outline: none !important;
         }
+
+        .offcanvas {
+            background-color: #004AAD !important;
+            color: #fff !important;
+        }
+
+        .offcanvas-header .btn-close {
+            filter: invert(100%);
+        }
     </style>
 
 </head>
 
 <body>
 
+    <!-- >
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">Blue - Assistente Virtual</a>
@@ -354,6 +364,39 @@
 
             </div>
         </div>
+    </nav><! -->
+
+    <nav class="navbar bg-body-tertiary fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand text-center" href="/">Blue - Assistente Virtual</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+                aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon" style="filter: invert(100%);"></span>
+            </button>
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
+                aria-labelledby="offcanvasNavbarLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Acesso Rápido</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                        <li class="nav-item">
+                            <a class="nav-link active" aria-current="page" href="/">🏡 Início</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/chat">🤖 Dúvidas</a>
+                        </li>
+                        <li class="nav-item disabled">
+                            <a class="nav-link disabled" href="/">👥 Quem Somos</a>
+                        </li>
+                        <li class="nav-item disabled">
+                            <a class="nav-link disabled" href="/">📚 Nosso Objetivo</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </nav>
 
     <div style="display: flex;
@@ -377,7 +420,9 @@
     </div>
 
     <a href="/chat" class="btn btn-secondary rounded-circle"
-        style="position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; display: flex; justify-content: center; align-items: center; font-size: 3rem;">?</a>
+        style="position: fixed; bottom: 20px; right: 20px; width: 60px; height: 60px; display: flex; justify-content: center; align-items: center; font-size: 3rem;"><img
+            width="60px" height="60px"
+            src="https://cdn.glitch.global/07ad2e51-d89c-4aca-89d6-6972a8cedb2d/image-svg.png?v=1682458327335" /></a>
 
 
 

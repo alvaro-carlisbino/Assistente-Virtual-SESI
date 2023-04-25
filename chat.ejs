@@ -26,7 +26,7 @@
         body {
             margin: 0;
             padding-bottom: 3rem;
-            background-color: #9BADED;
+            background-color: #002352;
             font-family: Poppins, sans-serif;
         }
 
@@ -45,7 +45,7 @@
         }
 
         .navbar {
-            background-color: #002352;
+            background-color: #004AAD;
             color: #fff;
         }
 
@@ -158,7 +158,7 @@
             font-size: 1rem;
             padding: 8px 12px;
             border-radius: 4px;
-            background-color: #007bff;
+            background-color: #004AAD !important;
             color: #fff;
             border: none;
             width: 75%;
@@ -171,7 +171,7 @@
                 font-size: auto;
                 padding: 8px 12px;
                 border-radius: 4px;
-                background-color: #007bff;
+                background-color: #004AAD !important;
                 color: #fff;
                 border: none;
                 width: auto;
@@ -198,20 +198,20 @@
             left: 0;
             right: 0;
             height: 60px;
-            background-color: #002352;
+            background-color: #004AAD;
             z-index: 999;
         }
 
         .navbar {
-            background-color: #002352 !important;
+            background-color: #004AAD !important;
             color: #fff !important;
         }
 
-        .navbar-brand{
+        .navbar-brand {
             color: #fff !important;
         }
 
-        .nav-item{
+        .nav-item {
             color: #fff !important;
         }
 
@@ -228,7 +228,7 @@
             color: #fff !important;
         }
 
-        .modal-content{
+        .modal-content {
             background-color: #002352 !important;
             color: #fff !important;
         }
@@ -236,12 +236,25 @@
         .btn-close {
             color: #fff !important;
         }
+
+        .offcanvas {
+            background-color: #004AAD !important;
+            color: #fff;
+        }
+
+        .offcanvas-header .btn-close {
+            filter: invert(100%);
+        }
+        form {
+            background-color: #004AAD !important;
+        }
     </style>
 
 </head>
 
 <body>
 
+    <!-- >
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
             <a class="navbar-brand" href="/">Blue - Assistente Virtual</a>
@@ -330,6 +343,39 @@
 
             </div>
         </div>
+    </nav><! -->
+
+    <nav class="navbar bg-body-tertiary fixed-top">
+        <div class="container-fluid">
+            <a class="navbar-brand text-center" href="/">Blue - Assistente Virtual</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar"
+                aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon" style="filter: invert(100%);"></span>
+            </button>
+            <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar"
+                aria-labelledby="offcanvasNavbarLabel">
+                <div class="offcanvas-header">
+                    <h5 class="offcanvas-title" id="offcanvasNavbarLabel">Acesso Rápido</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                </div>
+                <div class="offcanvas-body">
+                    <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                        <li class="nav-item">
+                            <a class="nav-link " aria-current="page" href="/">🏡 Início</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" href="/">🤖 Dúvidas</a>
+                        </li>
+                        <li class="nav-item disabled">
+                            <a class="nav-link disabled" href="/">👥 Quem Somos</a>
+                        </li>
+                        <li class="nav-item disabled">
+                            <a class="nav-link disabled" href="/">📚 Nosso Objetivo</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </nav>
 
     <div id="chat-container">
@@ -382,6 +428,13 @@
         });
         window.onload = function () {
             scrollToBottom();
+            var item = document.createElement("li")
+            item.classList.add("robot");
+            item.style.backgroundColor = "robot" == "user" ? "rgba(211, 174, 240, 1)" : "rgba(2, 41, 176, 0.42)";
+            item.style.color = "#FFF"
+            item.style.boxShadow = "rgba(0, 0, 0, 0.16) 0px 3px 6px, rgba(0, 0, 0, 0.23) 0px 3px 6px"
+            item.innerHTML = "Olá, em que posso te ajudar?";
+            messages.appendChild(item)
         };
         voiceInput.addEventListener("click", function (event) {
             event.stopPropagation();

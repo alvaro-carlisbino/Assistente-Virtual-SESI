@@ -9,7 +9,7 @@ var options = {
 //const http = require("http").Server(app)
 const http = require("https").Server(options, app)
 const io = require("socket.io")(http);
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 443;
 const { NlpManager } = require("node-nlp");
 const manager = new NlpManager({ languages: ["pt"] });
 require("ejs");
@@ -26,6 +26,28 @@ client.on("ready", () => {
 
 client.login(process.env.TOKEN);
 
+manager.addDocument("pt", "Como saber qual é o meu usuário no portal do aluno", "user portal do aluno");
+manager.addAnswer("pt", "user portal do aluno", `O usuário usado pra fazer o login no portal do aluno, na maioria dos casos é o CPF do estudante.`);
+manager.addDocument("pt", "Te amo", "amor");
+manager.addAnswer("pt", "amor", `Também amo a ti!`);
+
+manager.addDocument("pt", "Como acessar a declaração de matrícula?", "matricula")
+manager.addAnswer("pt", "matricula", `Para ter acesso a declaração de matrícula você deve:
+
+1 - Fazer o login no "Portal do Aluno" utilizando suas credenciais (nome de usuário e senha);
+
+2 - Clicar nos três traços no canto superior esquerdo e procurar pela aba "Declarações e Documentos";
+
+3 - Clicar em "emitir relatório" assim que encontrar o campo nomeado por "Declaração de Matrícula".`);
+
+manager.addDocument("pt", "Como acessar a carteirinha de estudante", "carteirinha");
+manager.addAnswer("pt", "carteirinha", `Para ter acesso a carteirinha de estudante  você deve:
+
+1 - Fazer o login no "Portal do Aluno" utilizando suas credenciais (nome de usuário e senha);
+
+2 - Clicar nos três traços no canto superior esquerdo e procurar pela aba "Declarações e Documentos";
+
+3 - Clicar em "emitir relatório" assim que encontrar o campo nomeado por "Carteirinha de Estudante".`);
 manager.addDocument("pt", "Olá", "cumprimento");
 manager.addDocument("pt", "Oi", "cumprimento");
 manager.addDocument("pt", "Tudo bem", "cumprimento");
@@ -145,7 +167,7 @@ manager.addAnswer(
   "pt",
   "ava",
   `O AVA, que significa Ambiente Virtual de Aprendizagem, é uma plataforma online que permite a realização de atividades acadêmicas e o acompanhamento do progresso do estudante em um curso ou disciplina
-1.	Acesse a plataforma: O acesso ao é geralmente feito através do site da instituição de ensino ou por meio de um link fornecido pelo professor. Certifique-se de ter as informações de login e senha corretas.
+1.	O acesso é feito pelo "Portal do aluno", ao clicar na aba "Moodle" ou por meio de um link oferecido pelos professores. Certifique-se de ter as informações de login e senha corretas.
 2.	O AVA pode oferecer diversas funcionalidades, como acesso a materiais de estudo, fóruns de discussão, chat com professores e colegas, realização de testes e trabalhos, entre outras
 3.	Realize as avaliações: As avaliações no AVA podem ser em formato de testes online, trabalhos ou outras atividades. Certifique-se de entender bem as instruções e os critérios de avaliação para realizar as tarefas da melhor maneira possível.
 
